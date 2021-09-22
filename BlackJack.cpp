@@ -32,10 +32,10 @@ struct Card
 	Suit suit;
 	Rank rank;
 };
-std::string printCard(Card &card)
+void printCard(Card &card)
 {
 	std::string abv;
-	switch(card.rank)
+	switch (card.rank)
 	{
 	case(RANK_2):
 		abv += '2';
@@ -76,33 +76,25 @@ std::string printCard(Card &card)
 	case(RANK_TYZ):
 		abv += 'D';
 		break;
-	/*case(card.Suit = SUIT_TREFU):
+	}
+	switch (card.suit)
+	{
+	case(SUIT_TREFU):
 		abv += 'T';
 		break;
-	case(card.Suit = SUIT_BYBNU):
+	case(SUIT_BYBNU):
 		abv += 'B';
 		break;
-	case(card.Suit = SUIT_CHERVU):
+	case(SUIT_CHERVU):
 		abv += 'C';
 		break;
-	case(card.Suit = SUIT_PIKI):
+	case(SUIT_PIKI):
 		abv += 'P';
-		break;*/
-		return abv;
+		break;
 	}
+	std::cout << abv << std::endl;
 }
 int main()
 {
-	int timeN = time(0);
-	int timeP = timeN;
-	for (int i = 0; i < 10000000000; ++i)
-	{
-		timeN = time(0);
-		if (timeN != timeP)
-		{
-			std::cout << timeN << std::endl;
-			timeP = timeN;
-		}
-		
-	}
+	
 }
