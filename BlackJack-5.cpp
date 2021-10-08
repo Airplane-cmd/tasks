@@ -132,7 +132,7 @@ void shuffleDeck()
 		++k;
 	}
 }
-int getCardValue(Card &card)
+int getCardValue(const Card &card)
 {
 	switch (card.rank)
 	{
@@ -175,30 +175,130 @@ int getCardValue(Card &card)
 	case(RANK_TYZ):
 		return 11;
 		break;
-	case(MAX_RANKS):
-		return 0;
-		break;
 	}
+}
+Card* cardPtrI(const std::array<Card, 52> &arr, int i )
+{
+	Card* cardPtr = &(static_cast<Card>(arr[i]));
+	return cardPtr;
+}
+int dillerTime(int d, int u, int n)
+{
+	d += getCardValue(*cardPtrI(cards, n));
+	std::cout << "Diller's score: " << d << std::endl;
+	std::cout << "User's score:   " << u << std::endl;
+	std::cout << "Diller's card: ";
+	printCard(*cardPtrI(cards, n));
+	std::cout << std::endl;
+	return d;
+}
+int userTime(int u, int d, int n)
+{
+	u += getCardValue(*cardPtrI(cards, n));
+	std::cout << "User's score:   " << u << std::endl;
+	std::cout << "Diller's score: " << d << std::endl;
+	std::cout << "Diller's card: ";
+	printCard(*cardPtrI(cards, n));
+	std::cout << std::endl;
+	return u;
 }
 bool playBlackJack(const std::array<Card, 52> &arr )
 {
-	Card* cardPtr = &(static_cast<Card>(arr[0]));//arr[0];//static_cast<&Card>(arr[0]);
+	//arr[0];//static_cast<&Card>(arr[0]);
+	int number = 0;
 	int diller = 0;
 	int user = 0;
+	char answer;
+	while(answer != 'Y')
+	{
+		std::cout<<"Start?(Y/N)"<<std::endl;
+		std::cin>>answer;
+		system("cls");
+	}
 	shuffleDeck();
-
-	if (user > diller)
-		return true;
-	else
-		return false;
+	diller = dillerTime(diller, user, number);
+	answer = '-';
+	while(answer != 'Y')
+	{
+		std::cout << "Next?(Y/N)" << std::endl;
+		std::cin >> answer;
+		std::cout << std::endl;
+	}
+	++number;
+	user = userTime(user, diller, number);
+	answer = '-';
+	while(answer != 'Y')
+	{
+		std::cout<<"Next?(Y/N)"<<std::endl;
+		std::cin>>answer;
+		std::cout<<std::endl;
+	}
+	++number;
+	user = userTime(user, diller, number);
+	answer = '-';
+	while(diller<=17)
+	{
+		/*while (answer != 'Y')
+		{
+			std::cout << "Next?(Y/N)" << std::endl;
+			std::cin >> answer;
+			std::cout << std::endl;
+		}*/
+		++number;
+		diller = dillerTime(diller, user, number);
+		answer = '-';
+		if (diller == 21)
+		{
+			return false;
+		}
+		else if (diller > 21)
+			return true;
+	}
+	std::cout << "take or let(t/l): ";
+	std::cin >> answer;
+	while (user < 21)
+	{
+		
+		if (answer == 't')
+		{
+			++number;
+			user = userTime(user, diller, number);
+			answer = '-';
+			std::cout << "take or let(t/l): ";
+			std::cin >> answer;
+			/*while (answer != 'Y')
+			{
+				std::cout << "Next?(Y/N)" << std::endl;
+				std::cin >> answer;
+				std::cout << std::endl;*/
+				//}
+			if (user > 21)
+				return false;
+			else if (user == 21)
+				return true;
+		}
+		else
+		{
+			if (user > diller)
+				return true;
+			else
+				return false;
+		}
+	}
+	
+	
 }
 int main()
 {
 	srand(time(0));
 	rand();
 	inicialisation();
-
-	printCards(cards);
+	bool result = playBlackJack(cards);
+	if (result == true)
+		std::cout << "You won" << std::endl;
+	else
+		std::cout << "You lost" << std::endl;
+	/*printCards(cards);
 	shuffleDeck();
-	printCards(cards);
+	printCards(cards);*/
 }
